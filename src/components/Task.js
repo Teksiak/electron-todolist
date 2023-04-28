@@ -2,7 +2,10 @@ import React, { useState } from "react";
 
 export default function Task({ number, title, description, deleteTask }) {
     const [edit, setEdit] = useState(false)
-    console.log(title, description);
+    const [editTitle, setTitle] = useState(title)
+    const [editDescription, setDescription] = useState(description)
+    
+
     return (
         <div style={{position: 'relative'}}>
             <div className="d-flex align-items-center px-5 mx-5">
@@ -10,16 +13,16 @@ export default function Task({ number, title, description, deleteTask }) {
                     {number}
                 </h3>
                 <div className="vertical-line mx-3"></div>
-                <div className="p-2 ps-0 d-flex flex-column ">
+                <div className="p-2 ps-0 d-flex flex-column align-items-start" style={{width: "200px"}}>
                     {
                         edit ?
-                        <input className="custom-input" value={title}></input>
-                        : <h3 className="text-light m-0">{title}</h3>
+                        <input className="custom-input" value={editTitle} onChange={(event) => {setTitle(event.target.value)}} placeholder="Title"></input>
+                        : <h3 className="text-light m-0">{editTitle}</h3>
                     }
                     {
                         edit ?
-                        <input className="custom-input" value={description}></input>
-                        : <small className="text-muted">{description}</small>
+                        <input className="custom-input" value={editDescription} onChange={(event) => {setDescription(event.target.value)}} placeholder="Description"></input>
+                        : <small className="text-muted">{editDescription}</small>
                     }
                 </div>
                 <button className="btn btn-sm btn-outline-light ms-5" onClick={() => {setEdit(prev => !prev)}}>
@@ -28,7 +31,7 @@ export default function Task({ number, title, description, deleteTask }) {
                     }
                 </button>
                 <div
-                    className="text-light mx-3 mb-2"
+                    className="text-light mx-3 mb-1"
                     style={{ cursor: "pointer" }}
                     onClick={deleteTask}
                 >

@@ -40,10 +40,10 @@ export default function List() {
             </div>
             <small className="text-muted">{message}</small> <br/>
             <button className="btn btn-outline-secondary mt-1" onClick={addTask}>Add Task</button>
-            <div>
+            <div className="d-flex flex-column align-items-center">
                 {
                     tasks.map((el, n) => {
-                        return <Task number={n+1} title={el.title} description={el.description} deleteTask={() => deleteTask(el.id)}/>
+                        return <Task key={el.id} number={n+1} title={el.title} description={el.description} deleteTask={() => deleteTask(el.id)}/>
                     })
                 }
             </div>
