@@ -5,25 +5,36 @@ export default function List() {
     const [tasks, setTasks] = useState([])
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
+    const [date, setDate] = useState("")
     const [message, setMessage] = useState("")
 
     const addTask = () => {
+        if(title == "" || date == "") {
+            //  ipcRenderer.send('SHOW_DIALOG', (
+            //     'error',
+            //     'Invalid data',
+            //     'Ttile and date must be filled!'
+            // ))
+            setMessage('Wrong data!')
+            return
+        }
+
         const newTask = {
             id: tasks.length != 0 ? tasks[tasks.length-1].id+1 : 1,
             title: title,
-            description: description
+            description: description,
+            date: Date.parse(date),
+            reminder: setTimeout(() => {
+                alert(title)
+            }, Date.parse(date) - Date.now())
         }
-        if(title == "") {
-            setMessage("Title cannot be empty!")
-        }
-        else {
-            setTasks(prev => {
-                return [...prev, newTask]
-            })
-            setTitle("")
-            setDescription("")
-            setMessage("")
-        }
+
+        setTasks(prev => {
+            return [...prev, newTask]
+        })
+        setTitle("")
+        setDescription("")
+        setMessage("")
     }
 
     const deleteTask = (taskId) => {
@@ -37,6 +48,7 @@ export default function List() {
             <div className="d-flex justify-content-center gap-4 m-3">
                 <input type="text" className="custom-input px-2" placeholder="Title" value={title} onChange={(event) => {setTitle(event.target.value)}}></input>
                 <input type="text" className="custom-input px-2" placeholder="Description" value={description} onChange={(event) => {setDescription(event.target.value)}}></input>
+                <input type="datetime-local" className="custom-input px-2" value={date} onChange={(event) => {setDate(event.target.value)}}></input>
             </div>
             <small className="text-muted">{message}</small> <br/>
             <button className="btn btn-outline-secondary mt-1" onClick={addTask}>Add Task</button>

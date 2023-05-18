@@ -7,7 +7,7 @@
   background: transparent;
   border: none;
   border-bottom: 1px solid #5d6264;
-  color: whitesmoke;
+  color: whitesmoke !important;
 }
 
 .horizontal-line {
@@ -21,4 +21,8 @@
   height: 60px;
   width: 1px;
   background: #5d6264;
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }

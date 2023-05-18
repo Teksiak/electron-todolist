@@ -1,10 +1,13 @@
 import "./App.css";
 import List from "./components/List";
+import Timer from "./components/Timer";
 
 function App() {
     return (
         <div>
             <h1 className="display-1 text-light text-center"><span className="">ToDo</span> List</h1>
+            <div className="horizontal-line"></div>
+            <Timer />
             <div className="horizontal-line"></div>
             <List />
         </div>

@@ -1,6 +1,6 @@
 const path = require('path');
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
 
 function createWindow() {
@@ -10,8 +10,13 @@ function createWindow() {
     height: 800,
     webPreferences: {
       nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js')
     },
   });
+
+  ipcMain.handle('SHOW_DIALOG', (event, args) => {
+    dialog.showMessageBox(win, args)
+  })
 
   // and load the index.html of the app.
   // win.loadFile("index.html");
