@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import Task from "./Task";
+import Timer from "./Timer";
+import { channels } from '../shared/constants';
+
+const { ipcRenderer } = window.require('electron');
 
 export default function List() {
     const [tasks, setTasks] = useState([])
@@ -10,12 +14,12 @@ export default function List() {
 
     const addTask = () => {
         if(title == "" || date == "") {
-            //  ipcRenderer.send('SHOW_DIALOG', (
-            //     'error',
-            //     'Invalid data',
-            //     'Ttile and date must be filled!'
-            // ))
-            setMessage('Wrong data!')
+             ipcRenderer.send(channels.SHOW_DIALOG, {
+                type: 'error',
+                title: 'Invalid data',
+                message: 'Title and date must be filled!'
+             })
+            // setMessage('Wrong data!')
             return
         }
 
@@ -23,9 +27,13 @@ export default function List() {
             id: tasks.length != 0 ? tasks[tasks.length-1].id+1 : 1,
             title: title,
             description: description,
-            date: Date.parse(date),
+            date: date,
+            finished: false,
             reminder: setTimeout(() => {
-                alert(title)
+                ipcRenderer.send(channels.SHOW_NOTIFICATION, {
+                    title,
+                    body: "Task reminder"
+                });
             }, Date.parse(date) - Date.now())
         }
 
@@ -34,6 +42,7 @@ export default function List() {
         })
         setTitle("")
         setDescription("")
+        setDate("")
         setMessage("")
     }
 
@@ -43,8 +52,14 @@ export default function List() {
         })
     }
 
+    useEffect(() => {
+        console.log(1)
+    }, [tasks])
+
     return (
         <div className="text-center">
+            <Timer setTasks={setTasks}/>
+            <div className="horizontal-line"></div>
             <div className="d-flex justify-content-center gap-4 m-3">
                 <input type="text" className="custom-input px-2" placeholder="Title" value={title} onChange={(event) => {setTitle(event.target.value)}}></input>
                 <input type="text" className="custom-input px-2" placeholder="Description" value={description} onChange={(event) => {setDescription(event.target.value)}}></input>
@@ -55,7 +70,7 @@ export default function List() {
             <div className="d-flex flex-column align-items-center">
                 {
                     tasks.map((el, n) => {
-                        return <Task key={el.id} number={n+1} title={el.title} description={el.description} deleteTask={() => deleteTask(el.id)}/>
+                        return <Task key={el.id} number={n+1} title={el.title} description={el.description} date={el.date} deleteTask={() => deleteTask(el.id)}/>
                     })
                 }
             </div>

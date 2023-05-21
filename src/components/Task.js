@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-export default function Task({ number, title, description, deleteTask }) {
+export default function Task({ number, title, description, deleteTask, date, finished }) {
     const [edit, setEdit] = useState(false)
     const [editTitle, setTitle] = useState(title)
     const [editDescription, setDescription] = useState(description)
-    
 
     return (
         <div style={{position: 'relative'}}>
             <div className="d-flex align-items-center px-5 mx-5">
-                <h3 className="display-1 fw-bold font-30 text-light">
-                    {number}
+                <h3 className={"display-1 fw-bold font-30 " + (finished ? "text-muted": "text-light")}>
+                    {
+                        finished ? 
+                        <del>{number}</del> : 
+                        number
+                    }
                 </h3>
                 <div className="vertical-line mx-3"></div>
                 <div className="p-2 ps-0 d-flex flex-column align-items-start" style={{width: "200px"}}>
@@ -22,7 +25,7 @@ export default function Task({ number, title, description, deleteTask }) {
                     {
                         edit ?
                         <input className="custom-input" value={editDescription} onChange={(event) => {setDescription(event.target.value)}} placeholder="Description"></input>
-                        : <small className="text-muted">{editDescription}</small>
+                        : <small className="text-muted">{editDescription} | {date}</small>
                     }
                 </div>
                 <button className="btn btn-sm btn-outline-light ms-5" onClick={() => {setEdit(prev => !prev)}}>

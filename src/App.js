@@ -7,8 +7,6 @@ function App() {
         <div>
             <h1 className="display-1 text-light text-center"><span className="">ToDo</span> List</h1>
             <div className="horizontal-line"></div>
-            <Timer />
-            <div className="horizontal-line"></div>
             <List />
         </div>
     )
